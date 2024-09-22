@@ -1,0 +1,20 @@
+name: ismail-hamdach site CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the site in the ismail-hamdach/builder container
+      run: |
+        docker run \
+        -v ${{ github.workspace }}:/srv/ismail-hamdach -v ${{ github.workspace }}/_site:/srv/ismail-hamdach/_site \
+        ismail-hamdach/builder:latest /bin/bash -c "chmod -R 777 /srv/ismail-hamdach && ismail-hamdach build --future"
